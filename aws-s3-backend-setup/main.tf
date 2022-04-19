@@ -8,7 +8,10 @@ provider "aws" {
 }
 
 module "remote_state" {
-  source = "nozaq/remote-state-s3-backend/aws"
+  source              = "nozaq/remote-state-s3-backend/aws"
+  dynamodb_table_name = "hello-world-fe-state-lock"
+  state_bucket_prefix = "hello-world-fe-state"
+  enable_replication = false
 
   providers = {
     aws         = aws
@@ -17,7 +20,7 @@ module "remote_state" {
 }
 
 resource "aws_iam_user" "terraform" {
-  name = "terraform-user-helloworld"
+  name = "hello-world-fe-state-user-for-deployment"
 }
 
 resource "aws_iam_user_policy_attachment" "remote_state_access" {

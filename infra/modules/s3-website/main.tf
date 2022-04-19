@@ -1,8 +1,16 @@
+locals {
+  bucket_name = "${var.domain_name}-${random_uuid.new.result}"
+}
+
+resource "random_uuid" "new" {
+
+}
+
 resource "aws_s3_bucket" "website" {
-  bucket = var.domain_name
+  bucket = local.bucket_name
   acl    = "public-read"
   policy = templatefile("${path.module}/policies/website.tftpl", {
-    BUCKET_NAME = var.domain_name
+    BUCKET_NAME = local.bucket_name
   })
 
   website {
